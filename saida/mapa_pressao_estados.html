@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Mapa de pressão sobre os preços dos combustíveis</title>
+  <link rel="stylesheet" href="mapa_pressao_estados.css">
+</head>
+<body>
+  <div class="page">
+    <h1>Quais estados mais esticaram os preços?</h1>
+    <p class="lead">
+      Em vez de assumir distribuição normal, este painel usa como referência principal a <strong>mediana da própria região</strong>.
+      Isso deixa a comparação mais justa entre estados com dinâmicas regionais diferentes. O destaque mais importante é o
+      <strong>excesso sobre a mediana regional</strong>: quantos pontos percentuais um estado subiu acima do comportamento típico
+      da sua própria região no período analisado.
+    </p>
+
+    <div class="shell">
+      <aside class="panel">
+        <div class="controls">
+          <div class="field">
+            <label for="produto">Produto</label>
+            <select id="produto"></select>
+          </div>
+          <div class="field">
+            <label for="metrica">Métrica do mapa</label>
+            <select id="metrica"></select>
+          </div>
+          <div class="control-row">
+            <button id="metric-help-button" class="action-button" type="button">Entenda esta métrica</button>
+            <button id="clear-selection-button" class="action-button" type="button">Limpar seleção</button>
+          </div>
+        </div>
+
+        <div class="metric-explainer" id="metric-explainer"></div>
+
+        <div class="section-title">Resumo do estado selecionado</div>
+        <div class="cards" id="cards"></div>
+
+        <div id="ranking-title" class="section-title">Top 5 para puxão de orelha</div>
+        <div class="ranking" id="ranking"></div>
+      </aside>
+
+      <section class="board">
+        <div class="map-shell">
+          <div class="map-title">Mapa comparativo por UF</div>
+          <div class="legend">
+            <span>Menor que a região</span>
+            <div class="gradient"></div>
+            <span>Maior que a região</span>
+          </div>
+          <div id="map-container" class="map-canvas"></div>
+          <div id="map-status" class="map-status">Carregando mapa do Brasil...</div>
+          <div class="metric-hint">Clique em um estado no mapa ou no ranking para ver os detalhes e entender cada métrica.</div>
+        </div>
+
+        <div class="detail-grid">
+          <div class="chart-panel">
+            <div class="chart-title" id="chart-title"></div>
+            <div class="detail-context" id="chart-context"></div>
+            <div id="chart-container"></div>
+          </div>
+          <div class="table-panel">
+            <div class="chart-title">Ranking completo</div>
+            <div id="table-container"></div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <div id="metric-modal-backdrop" class="modal-backdrop" aria-hidden="true">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="metric-modal-title">
+      <div class="modal-top">
+        <div>
+          <h2 id="metric-modal-title" class="modal-title"></h2>
+        </div>
+        <button id="metric-modal-close" class="modal-close" type="button" aria-label="Fechar">×</button>
+      </div>
+      <p id="metric-modal-friendly" class="modal-text"></p>
+      <div class="formula-box">
+        <div class="formula-label">Como a conta funciona</div>
+        <code id="metric-modal-formula"></code>
+      </div>
+    </div>
+  </div>
+
+  <script defer src="mapa_pressao_estados.js"></script>
+</body>
+</html>
