@@ -91,7 +91,7 @@ Pipeline resumido:
 Para rodar os dashboards localmente:
 
 ```bash
-cd docs
+cd saida
 python -m http.server
 ```
 
@@ -110,10 +110,10 @@ http://localhost:8000
     scripts de coleta e processamento
 
 /saida
-    dashboards gerados (HTML, JS, CSV, JSON)
+    dashboards gerados (HTML, JS, CSV, JSON e index.html)
 ```
 
-A pasta `/docs` é gerada em um mini-pipeline para publicação via GitHub Pages.
+O GitHub Pages publica diretamente o conteudo de `/saida` usando GitHub Actions.
 
 ---
 

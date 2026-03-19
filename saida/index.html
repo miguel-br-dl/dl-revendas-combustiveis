@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Combustiveis no Brasil</title>
+  <style>
+    :root {
+      --bg: #efe9dd;
+      --panel: rgba(255, 252, 247, 0.88);
+      --panel-strong: #fffdf8;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --line: rgba(145, 119, 82, 0.18);
+      --accent: #b45309;
+      --accent-strong: #8a3f06;
+      --accent-soft: rgba(180, 83, 9, 0.12);
+      --shadow: 0 24px 80px rgba(64, 42, 11, 0.14);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at top left, rgba(255, 248, 232, 0.95) 0, transparent 28%),
+        radial-gradient(circle at bottom right, rgba(245, 158, 11, 0.14) 0, transparent 22%),
+        linear-gradient(180deg, #f7f1e7 0%, #ece4d7 100%);
+    }
+
+    .page {
+      min-height: 100vh;
+      padding: 18px;
+    }
+
+    .app-shell {
+      display: grid;
+      grid-template-columns: 320px minmax(0, 1fr);
+      gap: 18px;
+      min-height: calc(100vh - 36px);
+    }
+
+    .sidebar,
+    .workspace {
+      min-height: 0;
+    }
+
+    .sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: var(--panel);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .brand-tag {
+      display: inline-flex;
+      align-items: center;
+      width: fit-content;
+      padding: 7px 12px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-strong);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 12px 0 10px;
+      font-size: clamp(28px, 3vw, 42px);
+      line-height: 1;
+      letter-spacing: -0.04em;
+    }
+
+    .lead {
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.7;
+    }
+
+    .section-label {
+      margin: 8px 0 0;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-list {
+      display: grid;
+      gap: 10px;
+    }
+
+    .nav-item {
+      width: 100%;
+      text-align: left;
+      border: 1px solid transparent;
+      border-radius: var(--radius-md);
+      background: transparent;
+      padding: 14px 16px;
+      color: inherit;
+      cursor: pointer;
+      transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+    }
+
+    .nav-item:hover,
+    .nav-item:focus-visible {
+      background: rgba(255, 255, 255, 0.5);
+      border-color: var(--line);
+      outline: none;
+      transform: translateY(-1px);
+    }
+
+    .nav-item.active {
+      background: linear-gradient(180deg, rgba(180, 83, 9, 0.14), rgba(180, 83, 9, 0.06));
+      border-color: rgba(180, 83, 9, 0.24);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+    }
+
+    .nav-kicker {
+      margin-bottom: 4px;
+      color: var(--accent-strong);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .nav-title {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-text {
+      display: block;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+    }
+
+    .mobile-switcher {
+      display: none;
+      margin-top: 4px;
+    }
+
+    .mobile-switcher select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.82);
+      padding: 14px 16px;
+      font: inherit;
+      color: var(--ink);
+    }
+
+    .sidebar-note {
+      margin-top: auto;
+      padding: 16px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-md);
+      background: rgba(255, 255, 255, 0.46);
+      color: var(--muted);
+      font-size: 13px;
+      line-height: 1.6;
+    }
+
+    .workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      background: rgba(255, 252, 247, 0.78);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+    }
+
+    .topbar-copy {
+      min-width: 0;
+    }
+
+    .topbar-label {
+      margin: 0 0 4px;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .topbar-title {
+      margin: 0 0 6px;
+      font-size: clamp(22px, 2.4vw, 32px);
+      line-height: 1.05;
+      letter-spacing: -0.03em;
+    }
+
+    .topbar-text {
+      margin: 0;
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    .topbar-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .status-pill,
+    .standalone-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 42px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+
+    .status-pill {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.6);
+      color: var(--muted);
+    }
+
+    .status-pill::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      margin-right: 8px;
+      border-radius: 999px;
+      background: #d97706;
+      box-shadow: 0 0 0 4px rgba(217, 119, 6, 0.12);
+    }
+
+    .standalone-link {
+      border: 1px solid rgba(180, 83, 9, 0.22);
+      background: linear-gradient(180deg, #cb6a1a, #a54809);
+      color: white;
+      font-weight: 700;
+      box-shadow: 0 12px 24px rgba(165, 72, 9, 0.18);
+    }
+
+    .standalone-link:hover,
+    .standalone-link:focus-visible {
+      background: linear-gradient(180deg, #bd6116, #964307);
+      outline: none;
+    }
+
+    .viewer-shell {
+      position: relative;
+      flex: 1;
+      min-height: 0;
+      border: 1px solid var(--line);
+      border-radius: calc(var(--radius-xl) + 4px);
+      background: rgba(255, 253, 249, 0.72);
+      backdrop-filter: blur(18px);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .viewer-shell::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(180deg, rgba(255, 255, 255, 0.34), transparent 140px),
+        radial-gradient(circle at top right, rgba(245, 158, 11, 0.08), transparent 28%);
+    }
+
+    .viewer-toolbar {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      height: 54px;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 250, 244, 0.74);
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #e5d2b8;
+    }
+
+    .dot.is-live {
+      background: #d97706;
+    }
+
+    .viewer-url {
+      margin-left: 4px;
+      color: var(--muted);
+      font-size: 13px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .viewer-frame-wrap {
+      position: relative;
+      height: calc(100% - 54px);
+      min-height: 62vh;
+    }
+
+    iframe {
+      display: block;
+      width: 100%;
+      height: 100%;
+      border: 0;
+      background: white;
+    }
+
+    .loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(250, 246, 240, 0.62);
+      backdrop-filter: blur(6px);
+      color: var(--muted);
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      transition: opacity 180ms ease, visibility 180ms ease;
+      z-index: 2;
+    }
+
+    .loading[hidden] {
+      opacity: 0;
+      visibility: hidden;
+    }
+
+    @media (max-width: 1080px) {
+      .app-shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        padding: 18px;
+      }
+
+      .sidebar-note {
+        margin-top: 0;
+      }
+    }
+
+    @media (max-width: 760px) {
+      .page {
+        padding: 12px;
+      }
+
+      .app-shell {
+        gap: 12px;
+        min-height: calc(100vh - 24px);
+      }
+
+      .sidebar,
+      .topbar,
+      .viewer-shell {
+        border-radius: 22px;
+      }
+
+      .nav-list {
+        display: none;
+      }
+
+      .mobile-switcher {
+        display: block;
+      }
+
+      .topbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .topbar-actions {
+        width: 100%;
+        flex-wrap: wrap;
+      }
+
+      .status-pill,
+      .standalone-link {
+        flex: 1 1 180px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <div class="app-shell">
+      <aside class="sidebar">
+        <div>
+          <h1>Escalada dos combustiveis no Brasil</h1>
+          <p class="lead">
+            Uma camada de navegacao unica para os dashboards gerados automaticamente, com troca rapida entre visoes e sem mexer nas subpaginas.
+          </p>
+        </div>
+
+        <p class="section-label">Explorar visoes</p>
+        <nav class="nav-list" id="nav-list" aria-label="Paginas do dashboard"></nav>
+
+        <div class="mobile-switcher">
+          <select id="page-select" aria-label="Escolha a pagina"></select>
+        </div>
+
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar" style="display:none">
+          <div class="topbar-copy">
+            <p class="topbar-label">Visualizacao ativa</p>
+            <h2 class="topbar-title" id="current-title">Evolucao semanal</h2>
+            <p class="topbar-text" id="current-description"></p>
+          </div>
+
+          <div class="topbar-actions">
+            <div class="status-pill" id="status-pill">Carregando painel</div>
+            <a class="standalone-link" id="standalone-link" href="painel_evolucao_semanal.html" target="_blank" rel="noreferrer">Abrir sozinho</a>
+          </div>
+        </header>
+
+        <div class="viewer-shell">
+          <div class="viewer-toolbar">
+            <span class="dot"></span>
+            <span class="dot"></span>
+            <span class="dot is-live"></span>
+            <div class="viewer-url" id="viewer-url">/saida/painel_evolucao_semanal.html</div>
+          </div>
+
+          <div class="viewer-frame-wrap">
+            <div class="loading" id="loading-indicator">Carregando dashboard...</div>
+            <iframe
+              id="page-frame"
+              title="Visualizacao dos dashboards"
+              src="painel_evolucao_semanal.html"
+              loading="eager"></iframe>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    const pages = [
+      {
+        file: "painel_evolucao_semanal.html",
+        kicker: "Painel 1",
+        title: "Evolucao semanal",
+        description: "Acompanhe a variacao dos precos por produto, estado e cidade com filtros diretos."
+      },
+      {
+        file: "mapa_pressao_estados_offline.html",
+        kicker: "Painel 2",
+        title: "Mapa por estado",
+        description: "Veja onde os precos mais pressionaram no periodo com leitura geografica e comparacao regional."
+      }
+    ];
+
+    const pageMap = new Map(pages.map((page) => [page.file, page]));
+    const defaultPage = pages[0].file;
+
+    const navList = document.getElementById("nav-list");
+    const pageSelect = document.getElementById("page-select");
+    const pageFrame = document.getElementById("page-frame");
+    const currentTitle = document.getElementById("current-title");
+    const currentDescription = document.getElementById("current-description");
+    const viewerUrl = document.getElementById("viewer-url");
+    const standaloneLink = document.getElementById("standalone-link");
+    const loadingIndicator = document.getElementById("loading-indicator");
+    const statusPill = document.getElementById("status-pill");
+
+    function pageFromHash() {
+      const hashValue = decodeURIComponent(window.location.hash.slice(1));
+      return pageMap.has(hashValue) ? hashValue : defaultPage;
+    }
+
+    function renderNav() {
+      navList.innerHTML = pages.map((page) => `
+        <button class="nav-item" type="button" data-file="${page.file}">
+          <span class="nav-kicker">${page.kicker}</span>
+          <span class="nav-title">${page.title}</span>
+          <span class="nav-text">${page.description}</span>
+        </button>
+      `).join("");
+
+      pageSelect.innerHTML = pages.map((page) => `
+        <option value="${page.file}">${page.title}</option>
+      `).join("");
+
+      navList.querySelectorAll("[data-file]").forEach((button) => {
+        button.addEventListener("click", () => {
+          window.location.hash = encodeURIComponent(button.dataset.file);
+        });
+      });
+    }
+
+    function setLoadingState(isLoading) {
+      loadingIndicator.hidden = !isLoading;
+      statusPill.textContent = isLoading ? "Carregando painel" : "Painel pronto";
+    }
+
+    function syncApp() {
+      const currentFile = pageFromHash();
+      const currentPage = pageMap.get(currentFile);
+
+      currentTitle.textContent = currentPage.title;
+      currentDescription.textContent = currentPage.description;
+      viewerUrl.textContent = `/saida/${currentPage.file}`;
+      standaloneLink.href = currentPage.file;
+      pageSelect.value = currentPage.file;
+      document.title = `${currentPage.title} | Combustiveis no Brasil`;
+
+      navList.querySelectorAll("[data-file]").forEach((button) => {
+        button.classList.toggle("active", button.dataset.file === currentPage.file);
+      });
+
+      if (pageFrame.getAttribute("src") !== currentPage.file) {
+        setLoadingState(true);
+        pageFrame.setAttribute("src", currentPage.file);
+      } else {
+        setLoadingState(false);
+      }
+    }
+
+    pageSelect.addEventListener("change", () => {
+      window.location.hash = encodeURIComponent(pageSelect.value);
+    });
+
+    pageFrame.addEventListener("load", () => {
+      setLoadingState(false);
+    });
+
+    window.addEventListener("hashchange", syncApp);
+
+    renderNav();
+    syncApp();
+  </script>
+</body>
+</html>
